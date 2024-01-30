@@ -688,9 +688,12 @@
             <OutputClaim ClaimTypeReferenceId="givenName" />
             <OutputClaim ClaimTypeReferenceId="surName" />
           </OutputClaims>
-          <ValidationTechnicalProfiles>
+
+          <!-- changed to not expires password -->
+          <!-- <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
-          </ValidationTechnicalProfiles>
+          </ValidationTechnicalProfiles> -->
+          <!-- changed to not expires password -->
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
 
