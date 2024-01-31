@@ -499,6 +499,9 @@
 
         <!-- Technical profiles for local accounts -->
 
+<!-- to create the extension attribute extension_mustResetPassword, you should upload the policy 
+            and create one account. Then ***comment out this technical profile***.
+            -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <Metadata>
             <Item Key="Operation">Write</Item>
@@ -510,6 +513,7 @@
           </InputClaims>
           <PersistedClaims>
             <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" DefaultValue="true" />
             <PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" />
             <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
             <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
@@ -608,7 +612,8 @@
             <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
           </InputClaims>
           <OutputClaims>
-
+            <!-- TO RESET PASS IN FIRST TIME -->
+            <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword" />
             <!-- Optional claims -->
             <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
             <OutputClaim ClaimTypeReferenceId="displayName" />
@@ -690,9 +695,9 @@
           </OutputClaims>
 
           <!-- changed to not expires password -->
-          <!-- <ValidationTechnicalProfiles>
+          <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
-          </ValidationTechnicalProfiles> -->
+          </ValidationTechnicalProfiles>
           <!-- changed to not expires password -->
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>

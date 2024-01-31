@@ -21,6 +21,14 @@
         <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
       </ClaimType>
     </ClaimsSchema>
+
+     <ClaimsSchema>
+      <ClaimType Id="extension_mustResetPassword">
+        <DisplayName>Must reset password</DisplayName>
+        <DataType>boolean</DataType>
+        <UserHelpText>Specifies whether user must reset the password</UserHelpText>
+	    </ClaimType>
+    </ClaimsSchema>
     <!-- end added claimsSchema-->
   </BuildingBlocks>
 
@@ -68,7 +76,8 @@
 
   <!-- added UserJourneys-->
   <UserJourneys>
-     <UserJourney Id="CustomSignUpSignIn">
+  <!-- THIS IS THE JORNEY THA WE USE -->
+     <UserJourney Id="CustomSignUpSignIn"> 
         <OrchestrationSteps>
 
           <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
@@ -107,14 +116,51 @@
           </OrchestrationStep>
 
            
+           <!--Demo: check if change password is required. If yes, ask the user to reset the password-->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>extension_mustResetPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>            
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mustResetPassword</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>            
+          </Preconditions>        
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>extension_mustResetPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>            
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mustResetPassword</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>            
+          </Preconditions>        
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserRemoveMustResetPasswordUsingObjectId" TechnicalProfileReferenceId="AAD-UserRemoveMustResetPasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+
           <!-- This step reads any user attributes that we may not have received when in the token. -->
-          <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <OrchestrationStep Order="5" Type="ClaimsExchange">
             <ClaimsExchanges>
               <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
             </ClaimsExchanges>
           </OrchestrationStep>
 
-          <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+          <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
         </OrchestrationSteps>
         <ClientDefinition ReferenceId="DefaultWeb" />
