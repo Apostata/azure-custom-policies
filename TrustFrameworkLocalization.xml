@@ -35,6 +35,7 @@
       <ContentDefinition Id="api.selfasserted">
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.en" />
+          <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.selfasserted.es" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
