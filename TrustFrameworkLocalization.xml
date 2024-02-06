@@ -20,6 +20,7 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.signuporsignin.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.signuporsignin.pt-br" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -28,6 +29,7 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.localaccountsignup.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.localaccountsignup.pt-br" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -36,6 +38,8 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.selfasserted.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.selfasserted.pt-br" />
+
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -44,6 +48,7 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountpasswordreset.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.localaccountpasswordreset.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.localaccountpasswordreset.pt-br" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -52,6 +57,7 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.idpselections.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.idpselections.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.idpselections.pt-br" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -60,6 +66,7 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignin.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.localaccountsignin.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.localaccountsignin.pt-br" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -68,6 +75,7 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
           <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.es" />
+          <LocalizedResourcesReference Language="pt-br" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.pt-br" />
           <!-- Add more languages here -->
         </LocalizedResourcesReferences>
       </ContentDefinition>
@@ -77,6 +85,7 @@
       <SupportedLanguages DefaultLanguage="es" MergeBehavior="Append">
         <SupportedLanguage>en</SupportedLanguage>
         <SupportedLanguage>es</SupportedLanguage>
+        <SupportedLanguage>pt-br</SupportedLanguage>
       </SupportedLanguages>
 
       <LocalizedResources Id="api.signuporsignin.en">
@@ -139,6 +148,37 @@
             <LocalizedString ElementType="ErrorMessage" StringId="AADRequestsThrottled">Hay demasiadas solicitudes en este momento. Por favor espera un tiempo y vuelve a intentarlo.</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+      <LocalizedResources Id="api.signuporsignin.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Endereço de Email</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="heading">Entrar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="local_intro_generic">Entrar com o seu {0}</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Senha</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="requiredField_password">Por favor, digite sua senha</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="requiredField_generic">Por favor, digite o seu {0}</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="invalid_generic">Por favor, digite um {0} válido</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="createaccount_one_link">Cadastre-se agora</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="createaccount_two_links">Cadastre-se com {0} ou {1}</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="createaccount_three_links">Cadastre-se com {0}, {1} ou {2}</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="forgotpassword_link">Esqueceu sua senha?</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_signin">Entrar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Não tem uma conta?</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="unknown_error">Estamos com problemas para fazer o seu login. Por favor, tente novamente mais tarde.</LocalizedString>
+            <!-- Descomente remember_me apenas se a opção de manter-me conectado estiver ativada. 
+            <LocalizedString ElementType="UxElement" StringId="remember_me">Manter-me conectado</LocalizedString> -->
+            <LocalizedString ElementType="ClaimsProvider" StringId="FacebookExchange">Facebook</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="ResourceOwnerFlowInvalidCredentials">Sua senha está incorreta.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidPassword">Sua senha está incorreta.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfPasswordExpired">Sua senha expirou.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Não conseguimos encontrar a sua conta.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfOldPasswordUsed">Parece que você usou uma senha antiga.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="DefaultMessage">Nome de usuário ou senha inválidos.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfUserAccountDisabled">Sua conta foi bloqueada. Entre em contato com o suporte para desbloqueá-la e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfUserAccountLocked">Sua conta está temporariamente bloqueada para evitar uso não autorizado. Tente novamente mais tarde.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="AADRequestsThrottled">Há muitas solicitações neste momento. Por favor, aguarde um pouco e tente novamente.</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
       <!--Local account sign-up page English-->
       <LocalizedResources Id="api.localaccountsignup.en">
         <LocalizedStrings>
@@ -186,6 +226,55 @@
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} has invalid input.</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Missing required element: {0}</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error in validation by: {0}</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.localaccountsignup.en">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">Email that can be used to contact you.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Please enter a valid email.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New password</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Enter a new password</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 characters, containing 3 of the following: lowercase characters, uppercase characters, digits (0-9), and one or more of the following symbols: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm new password</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Confirm the new password</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 characters, containing 3 of the following: lowercase characters, uppercase characters, digits (0-9), and one or more of the following symbols: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Display name</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="UserHelpText">Your display name.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="DisplayName">Surname</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="UserHelpText">Your surname (also known as family name or last name).</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="DisplayName">Given name</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="UserHelpText">Your given name (also known as first name).</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_continue">Create</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">One or more fields are filled incorrectly. Please check your entries and try again.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Password entry fields do not match. Please enter the same password in both fields and try again.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">A required field is missing. Please complete all required fields and try again.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="helplink_text">What's this?</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="initial_intro">Please provide the following details.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="preloader_alt">Please wait</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="required_field">This information is required.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancel</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Change email</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Resend new code</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send verification code</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verify code</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">That code has expired. Please request a new code.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">You have made too many incorrect attempts. Please try again later.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">That code i incorrect. Please try again.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_server">We are having trouble verifying your email. Please enter a valid email and try again.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">There have been too many requests to verify this email address. Please wait a while, then try again.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Verification code has been sent to your inbox. Please copy it to the input box below.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_input">Verification code</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Verification is necessary. Please click Send button.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_success_msg">Email address verified. You can now continue.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">There are too many requests at this moment. Please wait for some time and try again.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Claim not verified: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">A user with the specified ID already exists. Please choose a different one.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Incorrect pattern for: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} has invalid input.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Missing required element: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error in validation by: {0}</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccountsignup.es">
@@ -236,6 +325,54 @@
             <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error en la validación por: {0}</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+      <LocalizedResources Id="api.localaccountsignup.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Endereço de Email</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">Endereço de email que pode ser usado para entrar em contato com você.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Por favor, insira um endereço de email válido.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nova Senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Digite a nova senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 caracteres, contendo 3 de 4 dos seguintes: caracteres minúsculos, caracteres maiúsculos, dígitos (0-9) e um ou mais dos seguintes símbolos: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirmar Nova Senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Confirme a nova senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 caracteres, contendo 3 de 4 dos seguintes: caracteres minúsculos, caracteres maiúsculos, dígitos (0-9) e um ou mais dos seguintes símbolos: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Nome de Exibição</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="UserHelpText">Seu nome de exibição.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="DisplayName">Sobrenome</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="UserHelpText">Seu sobrenome (também conhecido como nome de família ou último nome).</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="DisplayName">Nome Próprio</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="UserHelpText">Seu nome próprio (também conhecido como primeiro nome).</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_continue">Criar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Um ou mais campos estão preenchidos incorretamente. Por favor, verifique suas entradas e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Os campos de senha não correspondem. Por favor, insira a mesma senha em ambos os campos e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Um campo obrigatório está faltando. Por favor, preencha todos os campos obrigatórios e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="helplink_text">O que é isso?</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="initial_intro">Por favor, forneça os seguintes detalhes.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="preloader_alt">Aguarde, por favor</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="required_field">Esta informação é obrigatória.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancelar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Alterar email</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Enviar novo código</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_send">Enviar código de verificação</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verificar código</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Esse código expirou. Por favor, solicite um novo código.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Você fez muitas tentativas incorretas. Por favor, tente novamente mais tarde.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Esse código está incorreto. Por favor, tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Estamos com problemas para verificar seu endereço de email. Por favor, insira um endereço de email válido e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Houve muitas solicitações para verificar este endereço de email. Por favor, aguarde um momento e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_info_msg">O código de verificação foi enviado para sua caixa de entrada. Por favor, copie-o para a caixa de entrada abaixo.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_input">Código de verificação</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">A verificação é necessária. Por favor, clique no botão Enviar.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_success_msg">Endereço de email verificado. Agora você pode continuar.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">Há muitas solicitações neste momento. Por favor, aguarde um tempo e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Reivindicação não verificada: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">Já existe um usuário com o ID especificado. Por favor, escolha um diferente.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Padrão incorreto para: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} possui entrada inválida.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Elemento obrigatório ausente: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Erro na validação por: {0}</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
 
       <!-- Self-asserted page English-->
       <LocalizedResources Id="api.selfasserted.en">
@@ -243,10 +380,14 @@
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">You are already registered, please press the back button and sign in instead.</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
       <LocalizedResources Id="api.selfasserted.es">
         <LocalizedStrings>
             <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">Ya estás registrado, por favor presiona el botón de retroceso e inicia sesión en su lugar.</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+       <LocalizedResources Id="api.selfasserted.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">Você já está registrado, por favor pressione o botão voltar e faça login em vez disso.</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
 
@@ -291,7 +432,6 @@
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error in validation by: {0}</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
       <LocalizedResources Id="api.localaccountpasswordreset.es">
         <LocalizedStrings>
             <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Correo electrónico</LocalizedString>
@@ -332,7 +472,46 @@
             <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error en la validación por: {0}</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
+      <LocalizedResources Id="api.localaccountpasswordreset.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Endereço de Email</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">Endereço de email que pode ser usado para entrar em contato com você.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Por favor, insira um endereço de email válido.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nova Senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Digite a nova senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 caracteres, contendo 3 de 4 dos seguintes: caracteres minúsculos, caracteres maiúsculos, dígitos (0-9) e um ou mais dos seguintes símbolos: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirmar Nova Senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Confirme a nova senha</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 caracteres, contendo 3 de 4 dos seguintes: caracteres minúsculos, caracteres maiúsculos, dígitos (0-9) e um ou mais dos seguintes símbolos: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Os campos de senha não correspondem. Por favor, insira a mesma senha em ambos os campos e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Um ou mais campos estão preenchidos incorretamente. Por favor, verifique suas entradas e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_continue">Continuar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancelar</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Não foi possível encontrar uma conta para o ID de usuário fornecido.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">Sua conta foi bloqueada. Entre em contato com o suporte para desbloqueá-la e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="required_field">Esta informação é obrigatória.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Alterar e-mail</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Enviar novo código</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_send">Enviar código de verificação</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verificar código</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Esse código expirou. Por favor, solicite um novo código.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Você fez muitas tentativas incorretas. Por favor, tente novamente mais tarde.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Esse código está incorreto. Por favor, tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Estamos com problemas para verificar seu endereço de email. Por favor, insira um endereço de email válido e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Foram feitas muitas solicitações para verificar este endereço de email. Por favor, aguarde um momento e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Um código de verificação foi enviado para sua caixa de entrada. Por favor, copie-o para a caixa de entrada abaixo.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_input">Código de verificação</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">A verificação é necessária. Por favor, clique no botão Enviar.</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="ver_success_msg">Endereço de email verificado. Agora você pode continuar.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">Há muitas solicitações neste momento. Por favor, aguarde um tempo e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Reivindicação não verificada: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">Já existe um usuário com o ID especificado. Por favor, escolha um diferente.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Padrão incorreto para: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} tem uma entrada inválida.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Elemento obrigatório ausente: {0}</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Erro na validação por: {0}</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <!-- Edit profile sign-in page English-->
       <LocalizedResources Id="api.idpselections.en">
         <LocalizedStrings>
@@ -341,11 +520,17 @@
           <LocalizedString ElementType="ClaimsProvider" StringId="FacebookExchange">Facebook</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
-       <LocalizedResources Id="api.idpselections.es">
+      <LocalizedResources Id="api.idpselections.es">
         <LocalizedStrings>
             <LocalizedString ElementType="UxElement" StringId="intro">Iniciar sesión</LocalizedString>
             <LocalizedString ElementType="ClaimsProvider" StringId="LocalAccountSigninEmailExchange">Inicio de sesión con cuenta local</LocalizedString>
+            <LocalizedString ElementType="ClaimsProvider" StringId="FacebookExchange">Facebook</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.idpselections.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="UxElement" StringId="intro">Entrar</LocalizedString>
+            <LocalizedString ElementType="ClaimsProvider" StringId="LocalAccountSigninEmailExchange">Entrar com conta local</LocalizedString>
             <LocalizedString ElementType="ClaimsProvider" StringId="FacebookExchange">Facebook</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
@@ -368,7 +553,6 @@
           <LocalizedString ElementType="ErrorMessage" StringId="AADRequestsThrottled">There are too many requests at this moment. Please wait for some time and try again.</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
       <LocalizedResources Id="api.localaccountsignin.es">
         <LocalizedStrings>
             <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Correo electrónico</LocalizedString>
@@ -386,6 +570,23 @@
             <LocalizedString ElementType="ErrorMessage" StringId="AADRequestsThrottled">Hay demasiadas solicitudes en este momento. Por favor, espera un tiempo y vuelve a intentarlo.</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+       <LocalizedResources Id="api.localaccountsignin.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Endereço de Email</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Senha</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_continue">Continuar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancelar</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="ResourceOwnerFlowInvalidCredentials">Sua senha está incorreta.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidPassword">Sua senha está incorreta.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfPasswordExpired">Sua senha expirou.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Não conseguimos encontrar sua conta.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfOldPasswordUsed">Parece que você usou uma senha antiga.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="DefaultMessage">Nome de usuário ou senha inválidos.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfUserAccountDisabled">Sua conta foi bloqueada. Entre em contato com o suporte para desbloqueá-la e tente novamente.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfUserAccountLocked">Sua conta está temporariamente bloqueada para evitar uso não autorizado. Tente novamente mais tarde.</LocalizedString>
+            <LocalizedString ElementType="ErrorMessage" StringId="AADRequestsThrottled">Há muitas solicitações no momento. Por favor, aguarde um pouco e tente novamente.</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
 
       <!-- Edit profile page English-->
       <LocalizedResources Id="api.selfasserted.profileupdate.en">
@@ -400,7 +601,6 @@
           <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancel</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
       <LocalizedResources Id="api.selfasserted.profileupdate.es">
         <LocalizedStrings>
             <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Nombre para mostrar</LocalizedString>
@@ -409,6 +609,18 @@
             <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="UserHelpText">Tu apellido (también conocido como nombre de familia o apellido).</LocalizedString>
             <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="DisplayName">Nombre</LocalizedString>
             <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="UserHelpText">Tu nombre (también conocido como primer nombre).</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_continue">Continuar</LocalizedString>
+            <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancelar</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.selfasserted.profileupdate.pt-br">
+        <LocalizedStrings>
+            <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Nome para exibição</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="UserHelpText">Seu nome para exibição.</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="DisplayName">Sobrenome</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="UserHelpText">Seu sobrenome (também conhecido como nome de família ou último nome).</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="DisplayName">Nome</LocalizedString>
+            <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="UserHelpText">Seu nome (também conhecido como primeiro nome).</LocalizedString>
             <LocalizedString ElementType="UxElement" StringId="button_continue">Continuar</LocalizedString>
             <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancelar</LocalizedString>
         </LocalizedStrings>
