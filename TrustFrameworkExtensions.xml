@@ -27,10 +27,6 @@
         <UserHelpText>Specifies whether user must reset the password</UserHelpText>
       </ClaimType>
 
-      <ClaimType Id="Otp">
-        <DisplayName>Secondary One-time password</DisplayName>
-        <DataType>string</DataType>
-      </ClaimType>
 
       <ClaimType Id="emailRequestBody">
         <DisplayName>SendGrid request body</DisplayName>
@@ -50,13 +46,12 @@
     <ClaimsTransformations>
         <ClaimsTransformation Id="GenerateEmailRequestBody" TransformationMethod="GenerateJson">
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="personalizations.0.to.0.email" />
-            <InputClaim ClaimTypeReferenceId="otp" TransformationClaimType="personalizations.0.dynamic_template_data.otp" />
-            <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
           </InputClaims>
           <InputParameters>
             <!-- Update the template_id value with the ID of your SendGrid template. -->
-            <InputParameter Id="template_id" DataType="string" Value="d-aef87f5604844f26a03e58ee8d0b6de9"/>
+            <InputParameter Id="template_id" DataType="string" Value="d-0d48d433eb2d4442a6d03f3990bd8963"/>
             <InputParameter Id="from.email" DataType="string" Value="comunicacaocup@close-upinternational.com.br"/>
             <!-- Update with a subject line appropriate for your organization. -->
             <InputParameter Id="personalizations.0.dynamic_template_data.subject" DataType="string" Value="Close-up account email verification code"/>
@@ -66,7 +61,7 @@
           </OutputClaims>
         </ClaimsTransformation>
   
-  </ClaimsTransformations>
+    </ClaimsTransformations>
 
   </BuildingBlocks>
 
@@ -152,10 +147,12 @@
         
       </TechnicalProfiles>
     </ClaimsProvider>
+    
+    <!-- sendGrid restifull provider to send custom template -->
     <ClaimsProvider>
       <DisplayName>RestfulProvider</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="SendOtp">
+        <TechnicalProfile Id="SendMail">
           <DisplayName>Use SendGrid's email API to send the code to the user</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
@@ -171,7 +168,7 @@
             <InputClaimsTransformation ReferenceId="GenerateEmailRequestBody" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="emailRequestBody" />
+            <InputClaim ClaimTypeReferenceId="emailRequestBody"  />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -184,6 +181,7 @@
   <!-- added UserJourneys-->
   <UserJourneys>
      <UserJourney Id="CustomSignUpSignIn">
+     <!-- Fluxo do login -->
         <OrchestrationSteps>
 
           <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
@@ -221,23 +219,30 @@
             </JourneyList>
           </OrchestrationStep>
 
-            <!--Demo: check if change password is required. If yes, ask the user to reset the password-->
+            <!-- This step reads any user attributes that we may not have received when in the token. -->
           <OrchestrationStep Order="4" Type="ClaimsExchange">
+              <ClaimsExchanges>
+                <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+              </ClaimsExchanges>
+          </OrchestrationStep>
+
+            <!--Demo: check if change password is required. If yes, ask the user to reset the password-->
+          <OrchestrationStep Order="5" Type="ClaimsExchange">
             <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
                 <Value>authenticationSource</Value>
                 <Value>socialIdpAuthentication</Value>
                 <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
+              </Precondition> -->
               <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
                 <Value>extension_mustResetPassword</Value>
                 <Action>SkipThisOrchestrationStep</Action>
               </Precondition>            
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
                 <Value>extension_mustResetPassword</Value>
                 <Value>True</Value>
                 <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>            
+              </Precondition>             -->
             </Preconditions>        
             <ClaimsExchanges>
               <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
@@ -246,36 +251,42 @@
 
           <!--Demo: check if change password is required. If yes remove the value of the extension attribute. 
               So, on the next time user dons' t need to update the password-->
-          <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <OrchestrationStep Order="6" Type="ClaimsExchange">
             <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
                 <Value>authenticationSource</Value>
                 <Value>socialIdpAuthentication</Value>
                 <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
+              </Precondition> -->
               <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
                 <Value>extension_mustResetPassword</Value>
                 <Action>SkipThisOrchestrationStep</Action>
               </Precondition>            
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
                 <Value>extension_mustResetPassword</Value>
                 <Value>True</Value>
                 <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>            
+              </Precondition>             -->
             </Preconditions>        
             <ClaimsExchanges>
               <ClaimsExchange Id="AADUserRemoveMustResetPasswordUsingObjectId" TechnicalProfileReferenceId="AAD-UserRemoveMustResetPasswordUsingObjectId" />
             </ClaimsExchanges>
           </OrchestrationStep>
            
-          <!-- This step reads any user attributes that we may not have received when in the token. -->
-          <OrchestrationStep Order="6" Type="ClaimsExchange">
+           <!-- send email after password changes -->
+          <OrchestrationStep Order="7" Type="ClaimsExchange">
+              <Preconditions>
+                <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                  <Value>extension_mustResetPassword</Value>
+                  <Action>SkipThisOrchestrationStep</Action>
+                </Precondition>
+              </Preconditions>
               <ClaimsExchanges>
-                <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                <ClaimsExchange Id="SendMailToUser" TechnicalProfileReferenceId="SendMail" />
               </ClaimsExchanges>
           </OrchestrationStep>
 
-          <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+          <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
         </OrchestrationSteps>
         <ClientDefinition ReferenceId="DefaultWeb" />
