@@ -33,6 +33,7 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
         <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="false" />
         <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword"/>
+        <OutputClaim ClaimTypeReferenceId="preferredLanguage" DefaultValue="es"/>
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

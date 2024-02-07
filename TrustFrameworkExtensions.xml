@@ -40,6 +40,20 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
 
+     <ClaimType Id="preferredLanguage">
+        <DisplayName>Preferred Language</DisplayName>
+        <DataType>string</DataType>
+        <DefaultPartnerClaimTypes>
+          <Protocol Name="OAuth2" PartnerClaimType="preferredlanguage" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="preferredlanguage" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/preferedlanguage" />
+        </DefaultPartnerClaimTypes>
+        <UserHelpText>Your Preferred Language</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <!-- TODO: adicionar um preferred language custom para teste -->
+
     </ClaimsSchema>
     <!-- end added claimsSchema-->
 
@@ -48,13 +62,13 @@
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
             <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+            <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="personalizations.0.dynamic_template_data.first_name" />
+            <InputClaim ClaimTypeReferenceId="preferredLanguage" TransformationClaimType="personalizations.0.dynamic_template_data.language" />
           </InputClaims>
           <InputParameters>
             <!-- Update the template_id value with the ID of your SendGrid template. -->
-            <InputParameter Id="template_id" DataType="string" Value="d-0d48d433eb2d4442a6d03f3990bd8963"/>
-            <InputParameter Id="from.email" DataType="string" Value="comunicacaocup@close-upinternational.com.br"/>
-            <!-- Update with a subject line appropriate for your organization. -->
-            <InputParameter Id="personalizations.0.dynamic_template_data.subject" DataType="string" Value="Close-up account email verification code"/>
+            <InputParameter Id="template_id" DataType="string" Value="d-43781ce7fcf44c39b150f5becc3ca32f"/>
+            <InputParameter Id="from.email" DataType="string" Value="portal@close-upinternational.com.br"/>
           </InputParameters>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="emailRequestBody" TransformationClaimType="outputClaim"/>
@@ -115,9 +129,11 @@
             <Item Key="ClientId">50c5b930-b076-40f5-8a49-38a026beb174</Item>
           </Metadata>
           <OutputClaims>
-            <!--Demo: Read the 'must reset password' extension attribute -->
+            <!-- Read the 'must reset password' extension attribute -->
             <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword" />
+            <OutputClaim ClaimTypeReferenceId="preferredlanguage" />
           </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
 
         <TechnicalProfile Id="AAD-UserRemoveMustResetPasswordUsingObjectId">
@@ -136,7 +152,8 @@
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
 
-        <!--Demo: to create the extension attribute extension_mustResetPassword, you should upload the policy 
+
+        <!-- to create the extension attribute extension_mustResetPassword, you should upload the policy 
             and create one account. Then ***comment out this technical profile***.
             -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
@@ -226,67 +243,27 @@
               </ClaimsExchanges>
           </OrchestrationStep>
 
-            <!--Demo: check if change password is required. If yes, ask the user to reset the password-->
-          <OrchestrationStep Order="5" Type="ClaimsExchange">
+
+          <OrchestrationStep Order="5" Type="InvokeSubJourney">
             <Preconditions>
-              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                <Value>authenticationSource</Value>
-                <Value>socialIdpAuthentication</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition> -->
               <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
                 <Value>extension_mustResetPassword</Value>
                 <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>            
-              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
-                <Value>extension_mustResetPassword</Value>
-                <Value>True</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>             -->
-            </Preconditions>        
-            <ClaimsExchanges>
-              <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
-            </ClaimsExchanges>
+              </Precondition>    
+            </Preconditions>
+            <JourneyList>
+              <Candidate SubJourneyReferenceId="FirstLogin" />
+            </JourneyList>
           </OrchestrationStep>
 
-          <!--Demo: check if change password is required. If yes remove the value of the extension attribute. 
-              So, on the next time user dons' t need to update the password-->
+          <!-- TODO: teste para ver se vai o email, remover -->
           <OrchestrationStep Order="6" Type="ClaimsExchange">
-            <Preconditions>
-              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                <Value>authenticationSource</Value>
-                <Value>socialIdpAuthentication</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition> -->
-              <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-                <Value>extension_mustResetPassword</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>            
-              <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
-                <Value>extension_mustResetPassword</Value>
-                <Value>True</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>             -->
-            </Preconditions>        
             <ClaimsExchanges>
-              <ClaimsExchange Id="AADUserRemoveMustResetPasswordUsingObjectId" TechnicalProfileReferenceId="AAD-UserRemoveMustResetPasswordUsingObjectId" />
+              <ClaimsExchange Id="SendMailToUser" TechnicalProfileReferenceId="SendMail" />
             </ClaimsExchanges>
           </OrchestrationStep>
-           
-           <!-- send email after password changes -->
-          <OrchestrationStep Order="7" Type="ClaimsExchange">
-              <Preconditions>
-                <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-                  <Value>extension_mustResetPassword</Value>
-                  <Action>SkipThisOrchestrationStep</Action>
-                </Precondition>
-              </Preconditions>
-              <ClaimsExchanges>
-                <ClaimsExchange Id="SendMailToUser" TechnicalProfileReferenceId="SendMail" />
-              </ClaimsExchanges>
-          </OrchestrationStep>
 
-          <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+          <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
         </OrchestrationSteps>
         <ClientDefinition ReferenceId="DefaultWeb" />
@@ -296,6 +273,7 @@
 
   <!-- added SubJourneys-->
   <SubJourneys>
+  <!-- password reset subJorney -->
     <SubJourney Id="PasswordReset" Type="Call">
       <OrchestrationSteps>
         <!-- Validate user's email address. -->
@@ -305,14 +283,46 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Collect and persist a new password. -->
+        <!-- Collect and persist a new password, then return to main journey -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
+        
       </OrchestrationSteps>
     </SubJourney>
+
+  <!-- Change password in first login subJourney -->
+    <SubJourney Id="FirstLogin" Type="Call">
+      <OrchestrationSteps>
+      <!-- Collect and persist a new password. -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- check if change password is required. If yes remove the value of the extension attribute. 
+              So, on the next time user dons' t need to update the password-->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserRemoveMustResetPasswordUsingObjectId" TechnicalProfileReferenceId="AAD-UserRemoveMustResetPasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- send email after password changes, then return to main journey-->
+          <OrchestrationStep Order="3" Type="ClaimsExchange">
+            <ClaimsExchanges>
+              <ClaimsExchange Id="SendMailToUser" TechnicalProfileReferenceId="SendMail" />
+            </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+
+    </SubJourney>
   </SubJourneys>
+
+
+   
   <!-- end added SubJourneys-->
 </TrustFrameworkPolicy>
