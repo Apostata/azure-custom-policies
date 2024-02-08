@@ -51,9 +51,6 @@
         <UserHelpText>Your Preferred Language</UserHelpText>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-
-      <!-- TODO: adicionar um preferred language custom para teste -->
-
     </ClaimsSchema>
     <!-- end added claimsSchema-->
 
@@ -83,7 +80,9 @@
 
     <ClaimsProvider>
       <DisplayName>Local Account SignIn</DisplayName>
+      
       <TechnicalProfiles>
+
          <TechnicalProfile Id="login-NonInteractive">
           <Metadata>
             <Item Key="client_id">425241af-1cfd-4b50-b2a5-e40db4b7a551</Item>
@@ -96,6 +95,7 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+
     <!-- added claims provider-->
     <ClaimsProvider>
       <DisplayName>Local Account ForgotPassword</DisplayName>
@@ -147,7 +147,8 @@
           </InputClaims>
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="objectId" />
-            <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" />            
+            <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" />       
+            <PersistedClaim ClaimTypeReferenceId="preferredlanguage" />     
           </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
@@ -159,6 +160,7 @@
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" DefaultValue="true" />
+            <PersistedClaim ClaimTypeReferenceId="preferredlanguage" />  
           </PersistedClaims>
         </TechnicalProfile>
         
@@ -256,14 +258,7 @@
             </JourneyList>
           </OrchestrationStep>
 
-          <!-- TODO: teste para ver se vai o email, remover -->
-          <OrchestrationStep Order="6" Type="ClaimsExchange">
-            <ClaimsExchanges>
-              <ClaimsExchange Id="SendMailToUser" TechnicalProfileReferenceId="SendMail" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-
-          <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+          <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
         </OrchestrationSteps>
         <ClientDefinition ReferenceId="DefaultWeb" />
