@@ -109,9 +109,9 @@
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.2</DataUri>
       </ContentDefinition>
 
-      <!-- <ContentDefinition Id="api.localaccountpasswordreset">
+      <ContentDefinition Id="api.localaccountpasswordreset">
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.2</DataUri>
-      </ContentDefinition> -->
+      </ContentDefinition>
     </ContentDefinitions>
     <!-- end added ContentDefinitions-->
 
@@ -186,6 +186,7 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+    
 
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
@@ -324,12 +325,11 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-    <!-- <ClaimsProvider>
+    <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
           <DisplayClaims>
-            <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
             <DisplayClaim ClaimTypeReferenceId="displayName" Required="true" />
             <DisplayClaim ClaimTypeReferenceId="givenName" Required="true" />
             <DisplayClaim ClaimTypeReferenceId="surName" Required="true" />
@@ -338,13 +338,21 @@
           </DisplayClaims>
         </TechnicalProfile>
 
-        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+        <TechnicalProfile Id="VerifyEmail">
+          <DisplayName>Verify Email</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
+          </Metadata>
           <DisplayClaims>
             <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
           </DisplayClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" Required="true" />
+          </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
-    </ClaimsProvider> -->
+    </ClaimsProvider>
     <!-- end added claims provider-->
 
   </ClaimsProviders>
@@ -426,9 +434,15 @@
         <!-- Validate user's email address. -->
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="VerifyEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
+
+        <!-- <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountDiscoveryUsingEmailAddressCustom" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep> -->
 
         <!-- Collect and persist a new password, then return to main journey -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
