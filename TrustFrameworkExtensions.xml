@@ -28,7 +28,17 @@
       </ClaimType>
 
 
-      <ClaimType Id="emailRequestBody">
+      <ClaimType Id="welcomeMailRequestBody">
+        <DisplayName>SendGrid request body</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="Otp">
+        <DisplayName>Secondary One-time password</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="verificationEmailRequestBody">
         <DisplayName>SendGrid request body</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
@@ -54,8 +64,9 @@
     </ClaimsSchema>
     <!-- end added claimsSchema-->
 
+
     <ClaimsTransformations>
-        <ClaimsTransformation Id="GenerateEmailRequestBody" TransformationMethod="GenerateJson">
+        <ClaimsTransformation Id="GenerateWelcomeMailRequestBody" TransformationMethod="GenerateJson">
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
             <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
@@ -68,11 +79,68 @@
             <InputParameter Id="from.email" DataType="string" Value="portal@close-upinternational.com.br"/>
           </InputParameters>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="emailRequestBody" TransformationClaimType="outputClaim"/>
+            <OutputClaim ClaimTypeReferenceId="welcomeMailRequestBody" TransformationClaimType="outputClaim"/>
           </OutputClaims>
         </ClaimsTransformation>
-  
+
+
+        <ClaimsTransformation Id="GenerateVerificationeMailRequestBody" TransformationMethod="GenerateJson">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+            <InputClaim ClaimTypeReferenceId="otp" TransformationClaimType="personalizations.0.dynamic_template_data.verification_code" />
+            <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="personalizations.0.dynamic_template_data.first_name" />
+            <InputClaim ClaimTypeReferenceId="preferredLanguage" TransformationClaimType="personalizations.0.dynamic_template_data.language" />
+          </InputClaims>
+          <InputParameters>
+            <!-- Update the template_id value with the ID of your SendGrid template. -->
+            <InputParameter Id="template_id" DataType="string" Value="d-3581fcc0167e4d228fa5521ab716e642"/>
+            <InputParameter Id="from.email" DataType="string" Value="portal@close-upinternational.com.br"/>
+          </InputParameters>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="verificationEmailRequestBody" TransformationClaimType="outputClaim"/>
+          </OutputClaims>
+        </ClaimsTransformation>
     </ClaimsTransformations>
+
+     <!-- added ContentDefinitions-->
+    <ContentDefinitions>
+      <ContentDefinition Id="api.localaccountsignup">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.2</DataUri>
+      </ContentDefinition>
+
+      <!-- <ContentDefinition Id="api.localaccountpasswordreset">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.2</DataUri>
+      </ContentDefinition> -->
+    </ContentDefinitions>
+    <!-- end added ContentDefinitions-->
+
+    <!-- added DisplayControls-->
+    <DisplayControls>
+      <DisplayControl Id="emailVerificationControl" UserInterfaceControlType="VerificationControl">
+        <DisplayClaims>
+          <DisplayClaim ClaimTypeReferenceId="signInNames.emailAddress" Required="true" />
+          <DisplayClaim ClaimTypeReferenceId="verificationCode" ControlClaimType="VerificationCode" Required="true" />
+        </DisplayClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+        </OutputClaims>
+        <Actions>
+          <Action Id="SendCode">
+            <ValidationClaimsExchange>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="GenerateOtp" />
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="SendVerificationMail" />
+            </ValidationClaimsExchange>
+          </Action>
+          <Action Id="VerifyCode">
+            <ValidationClaimsExchange>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="VerifyOtp" />
+            </ValidationClaimsExchange>
+          </Action>
+        </Actions>
+      </DisplayControl>
+    </DisplayControls>
+    <!-- added DisplayControls-->
 
   </BuildingBlocks>
 
@@ -167,35 +235,119 @@
       </TechnicalProfiles>
     </ClaimsProvider>
     
-    <!-- sendGrid restifull provider to send custom template -->
+    <!-- sendGrid restfull provider to send welcome email template -->
     <ClaimsProvider>
-      <DisplayName>RestfulProvider</DisplayName>
+      <DisplayName>RestfulProviderendWelcomeMail</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="SendMail">
+        <TechnicalProfile Id="SendWelcomeMail">
+          <DisplayName>Use SendGrid's email API to send welcome to the user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://api.sendgrid.com/v3/mail/send</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">welcomeMailRequestBody</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateWelcomeMailRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="welcomeMailRequestBody"  />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- sendGrid restfull provider to send verification email template -->
+    <ClaimsProvider>
+      <DisplayName>RestfulProviderSendVerificationMail</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SendVerificationMail">
           <DisplayName>Use SendGrid's email API to send the code to the user</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ServiceUrl">https://api.sendgrid.com/v3/mail/send</Item>
             <Item Key="AuthenticationType">Bearer</Item>
             <Item Key="SendClaimsIn">Body</Item>
-            <Item Key="ClaimUsedForRequestPayload">emailRequestBody</Item>
+            <Item Key="ClaimUsedForRequestPayload">verificationEmailRequestBody</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
           </CryptographicKeys>
           <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="GenerateEmailRequestBody" />
+            <InputClaimsTransformation ReferenceId="GenerateVerificationeMailRequestBody" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="emailRequestBody"  />
+            <InputClaim ClaimTypeReferenceId="verificationEmailRequestBody"  />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-    <!-- end added claims provider-->
-  </ClaimsProviders>
 
-  
+     <ClaimsProvider>
+      <DisplayName>One time password technical profiles</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="GenerateOtp">
+          <DisplayName>Generate one time password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="Operation">GenerateCode</Item>
+            <Item Key="CodeExpirationInSeconds">600</Item>
+            <Item Key="CodeLength">6</Item>
+            <Item Key="CharacterSet">0-9</Item>
+            <Item Key="NumRetryAttempts">5</Item>
+            <Item Key="NumCodeGenerationAttempts">100</Item>
+            <Item Key="ReuseSameCode">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identifier" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="otp" PartnerClaimType="otpGenerated" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="VerifyOtp">
+          <DisplayName>Verify one time password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="Operation">VerifyCode</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identifier" />
+            <InputClaim ClaimTypeReferenceId="verificationCode" PartnerClaimType="otpToVerify" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <DisplayClaims>
+            <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
+            <DisplayClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="surName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </DisplayClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+          <DisplayClaims>
+            <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
+          </DisplayClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- end added claims provider-->
+
+  </ClaimsProviders>
 
   <!-- added UserJourneys-->
   <UserJourneys>
@@ -309,9 +461,9 @@
         <!-- send email after password changes, then return to main journey-->
           <OrchestrationStep Order="3" Type="ClaimsExchange">
             <ClaimsExchanges>
-              <ClaimsExchange Id="SendMailToUser" TechnicalProfileReferenceId="SendMail" />
+              <ClaimsExchange Id="SendWelcomeMail" TechnicalProfileReferenceId="SendWelcomeMail" />
             </ClaimsExchanges>
-        </OrchestrationStep>
+          </OrchestrationStep>
       </OrchestrationSteps>
 
     </SubJourney>

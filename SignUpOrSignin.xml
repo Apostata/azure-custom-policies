@@ -31,8 +31,8 @@
         <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="username" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
-        <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="false" />
-        <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword"/>
+        <!-- <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="false" /> -->
+        <!-- <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword"/> -->
         <OutputClaim ClaimTypeReferenceId="preferredLanguage" DefaultValue="es"/>
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
