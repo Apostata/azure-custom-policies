@@ -324,7 +324,7 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-    <ClaimsProvider>
+    <!-- <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
@@ -344,7 +344,7 @@
           </DisplayClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
-    </ClaimsProvider>
+    </ClaimsProvider> -->
     <!-- end added claims provider-->
 
   </ClaimsProviders>
