@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="closeupbigdata.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://closeupbigdata.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>closeupbigdata.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkLocalization</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <!-- added claimsSchema-->
+    <ClaimsSchema>
+      <ClaimType Id="isForgotPassword">
+        <DisplayName>isForgotPassword</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
+      </ClaimType>
+
+      <ClaimType Id="extension_mustResetPassword">
+        <DisplayName>Must reset password</DisplayName>
+        <DataType>boolean</DataType>
+        <UserHelpText>Specifies whether user must reset the password</UserHelpText>
+      </ClaimType>
+
+
+      <ClaimType Id="welcomeMailRequestBody">
+        <DisplayName>SendGrid request body</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="Otp">
+        <DisplayName>Secondary One-time password</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="verificationEmailRequestBody">
+        <DisplayName>SendGrid request body</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="VerificationCode">
+        <DisplayName>Secondary Verification Code</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter your email verification code</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+     <ClaimType Id="preferredLanguage">
+        <DisplayName>Preferred Language</DisplayName>
+        <DataType>string</DataType>
+        <DefaultPartnerClaimTypes>
+          <Protocol Name="OAuth2" PartnerClaimType="preferredlanguage" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="preferredlanguage" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/preferedlanguage" />
+        </DefaultPartnerClaimTypes>
+        <UserHelpText>Your Preferred Language</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+    <!-- end added claimsSchema-->
+
+
+    <ClaimsTransformations>
+        <ClaimsTransformation Id="GenerateWelcomeMailRequestBody" TransformationMethod="GenerateJson">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+            <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="personalizations.0.dynamic_template_data.first_name" />
+            <InputClaim ClaimTypeReferenceId="preferredLanguage" TransformationClaimType="personalizations.0.dynamic_template_data.language" />
+          </InputClaims>
+          <InputParameters>
+            <!-- Update the template_id value with the ID of your SendGrid template. -->
+            <InputParameter Id="template_id" DataType="string" Value="d-43781ce7fcf44c39b150f5becc3ca32f"/>
+            <InputParameter Id="from.email" DataType="string" Value="portal@close-upinternational.com.br"/>
+          </InputParameters>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="welcomeMailRequestBody" TransformationClaimType="outputClaim"/>
+          </OutputClaims>
+        </ClaimsTransformation>
+
+
+        <ClaimsTransformation Id="GenerateVerificationeMailRequestBody" TransformationMethod="GenerateJson">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+            <InputClaim ClaimTypeReferenceId="otp" TransformationClaimType="personalizations.0.dynamic_template_data.verification_code" />
+            <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="personalizations.0.dynamic_template_data.first_name" />
+            <InputClaim ClaimTypeReferenceId="preferredLanguage" TransformationClaimType="personalizations.0.dynamic_template_data.language" />
+          </InputClaims>
+          <InputParameters>
+            <!-- Update the template_id value with the ID of your SendGrid template. -->
+            <InputParameter Id="template_id" DataType="string" Value="d-3581fcc0167e4d228fa5521ab716e642"/>
+            <InputParameter Id="from.email" DataType="string" Value="portal@close-upinternational.com.br"/>
+          </InputParameters>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="verificationEmailRequestBody" TransformationClaimType="outputClaim"/>
+          </OutputClaims>
+        </ClaimsTransformation>
+    </ClaimsTransformations>
+
+     <!-- added ContentDefinitions-->
+    <ContentDefinitions>
+      <ContentDefinition Id="api.localaccountsignup">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.2</DataUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.2</DataUri>
+      </ContentDefinition>
+    </ContentDefinitions>
+    <!-- end added ContentDefinitions-->
+
+    <!-- added DisplayControls-->
+    <DisplayControls>
+      <DisplayControl Id="emailVerificationControl" UserInterfaceControlType="VerificationControl">
+        <DisplayClaims>
+          <DisplayClaim ClaimTypeReferenceId="signInNames.emailAddress" Required="true" />
+          <DisplayClaim ClaimTypeReferenceId="verificationCode" ControlClaimType="VerificationCode" Required="true" />
+        </DisplayClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+        </OutputClaims>
+        <Actions>
+          <Action Id="SendCode">
+            <ValidationClaimsExchange>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="GenerateOtp" />
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="SendVerificationMail" />
+            </ValidationClaimsExchange>
+          </Action>
+          <Action Id="VerifyCode">
+            <ValidationClaimsExchange>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="VerifyOtp" />
+            </ValidationClaimsExchange>
+          </Action>
+        </Actions>
+      </DisplayControl>
+    </DisplayControls>
+    <!-- added DisplayControls-->
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      
+      <TechnicalProfiles>
+
+         <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">425241af-1cfd-4b50-b2a5-e40db4b7a551</Item>
+            <Item Key="IdTokenAudience">fc40322f-7c2f-475d-b69f-5cc1244a6a55</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="425241af-1cfd-4b50-b2a5-e40db4b7a551" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="fc40322f-7c2f-475d-b69f-5cc1244a6a55" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- added claims provider-->
+    <ClaimsProvider>
+      <DisplayName>Local Account ForgotPassword</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ForgotPassword">
+          <DisplayName>Forgot your password?</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="true"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <Metadata>
+            <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
+          </Metadata>
+        </TechnicalProfile>
+        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>  
+
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <Metadata>
+            <Item Key="ApplicationObjectId">49a70b6f-fe9c-4d12-9120-96a0b8d9ffe6</Item>
+            <Item Key="ClientId">50c5b930-b076-40f5-8a49-38a026beb174</Item>
+          </Metadata>
+          <OutputClaims>
+            <!-- Read the 'must reset password' extension attribute -->
+            <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword" />
+            <OutputClaim ClaimTypeReferenceId="preferredlanguage" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserRemoveMustResetPasswordUsingObjectId">
+          <Metadata>
+            <Item Key="ApplicationObjectId">49a70b6f-fe9c-4d12-9120-96a0b8d9ffe6</Item>
+            <Item Key="ClientId">50c5b930-b076-40f5-8a49-38a026beb174</Item>
+            <Item Key="Operation">DeleteClaims</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" />       
+            <PersistedClaim ClaimTypeReferenceId="preferredlanguage" />     
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+
+        <!-- to create the extension attribute extension_mustResetPassword, you should upload the policy 
+            and create one account. Then ***comment out this technical profile***.
+            -->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" DefaultValue="true" />
+            <PersistedClaim ClaimTypeReferenceId="preferredlanguage" />  
+          </PersistedClaims>
+        </TechnicalProfile>
+        
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    
+    <!-- sendGrid restfull provider to send welcome email template -->
+    <ClaimsProvider>
+      <DisplayName>RestfulProviderendWelcomeMail</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SendWelcomeMail">
+          <DisplayName>Use SendGrid's email API to send welcome to the user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://api.sendgrid.com/v3/mail/send</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">welcomeMailRequestBody</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateWelcomeMailRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="welcomeMailRequestBody"  />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- sendGrid restfull provider to send verification email template -->
+    <ClaimsProvider>
+      <DisplayName>RestfulProviderSendVerificationMail</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SendVerificationMail">
+          <DisplayName>Use SendGrid's email API to send the code to the user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://api.sendgrid.com/v3/mail/send</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">verificationEmailRequestBody</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateVerificationeMailRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="verificationEmailRequestBody"  />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+     <ClaimsProvider>
+      <DisplayName>One time password technical profiles</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="GenerateOtp">
+          <DisplayName>Generate one time password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="Operation">GenerateCode</Item>
+            <Item Key="CodeExpirationInSeconds">600</Item>
+            <Item Key="CodeLength">6</Item>
+            <Item Key="CharacterSet">0-9</Item>
+            <Item Key="NumRetryAttempts">5</Item>
+            <Item Key="NumCodeGenerationAttempts">100</Item>
+            <Item Key="ReuseSameCode">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identifier" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="otp" PartnerClaimType="otpGenerated" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="VerifyOtp">
+          <DisplayName>Verify one time password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="Operation">VerifyCode</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identifier" />
+            <InputClaim ClaimTypeReferenceId="verificationCode" PartnerClaimType="otpToVerify" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="surName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </DisplayClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="VerifyEmail">
+          <DisplayName>Verify Email</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
+          </Metadata>
+          <DisplayClaims>
+            <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
+          </DisplayClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" Required="true" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- end added claims provider-->
+
+  </ClaimsProviders>
+
+  <!-- added UserJourneys-->
+  <UserJourneys>
+     <UserJourney Id="CustomSignUpSignIn">
+     <!-- Fluxo do login -->
+        <OrchestrationSteps>
+
+          <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+            <ClaimsProviderSelections>
+              <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+              <ClaimsProviderSelection TargetClaimsExchangeId="ForgotPasswordExchange" />
+            </ClaimsProviderSelections>
+            <ClaimsExchanges>
+              <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+            </ClaimsExchanges>
+          </OrchestrationStep>
+          
+          <OrchestrationStep Order="2" Type="ClaimsExchange">
+            <Preconditions>
+              <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                <Value>objectId</Value>
+                <Action>SkipThisOrchestrationStep</Action>
+              </Precondition>
+            </Preconditions>
+            <ClaimsExchanges>
+              <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+              <ClaimsExchange Id="ForgotPasswordExchange" TechnicalProfileReferenceId="ForgotPassword" />
+            </ClaimsExchanges>
+          </OrchestrationStep>
+
+          <OrchestrationStep Order="3" Type="InvokeSubJourney">
+            <Preconditions>
+              <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                <Value>isForgotPassword</Value>
+                <Action>SkipThisOrchestrationStep</Action>
+              </Precondition>
+            </Preconditions>
+            <JourneyList>
+              <Candidate SubJourneyReferenceId="PasswordReset" />
+            </JourneyList>
+          </OrchestrationStep>
+
+            <!-- This step reads any user attributes that we may not have received when in the token. -->
+          <OrchestrationStep Order="4" Type="ClaimsExchange">
+              <ClaimsExchanges>
+                <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+              </ClaimsExchanges>
+          </OrchestrationStep>
+
+
+          <OrchestrationStep Order="5" Type="InvokeSubJourney">
+            <Preconditions>
+              <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                <Value>extension_mustResetPassword</Value>
+                <Action>SkipThisOrchestrationStep</Action>
+              </Precondition>    
+            </Preconditions>
+            <JourneyList>
+              <Candidate SubJourneyReferenceId="FirstLogin" />
+            </JourneyList>
+          </OrchestrationStep>
+
+          <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+        </OrchestrationSteps>
+        <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+  <!-- added UserJourneys-->
+
+  <!-- added SubJourneys-->
+  <SubJourneys>
+  <!-- password reset subJorney -->
+    <SubJourney Id="PasswordReset" Type="Call">
+      <OrchestrationSteps>
+        <!-- Validate user's email address. -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="VerifyEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountDiscoveryUsingEmailAddressCustom" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep> -->
+
+        <!-- Collect and persist a new password, then return to main journey -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+      </OrchestrationSteps>
+    </SubJourney>
+
+  <!-- Change password in first login subJourney -->
+    <SubJourney Id="FirstLogin" Type="Call">
+      <OrchestrationSteps>
+      <!-- Collect and persist a new password. -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- check if change password is required. If yes remove the value of the extension attribute. 
+              So, on the next time user dons' t need to update the password-->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserRemoveMustResetPasswordUsingObjectId" TechnicalProfileReferenceId="AAD-UserRemoveMustResetPasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- send email after password changes, then return to main journey-->
+          <OrchestrationStep Order="3" Type="ClaimsExchange">
+            <ClaimsExchanges>
+              <ClaimsExchange Id="SendWelcomeMail" TechnicalProfileReferenceId="SendWelcomeMail" />
+            </ClaimsExchanges>
+          </OrchestrationStep>
+      </OrchestrationSteps>
+
+    </SubJourney>
+  </SubJourneys>
+
+
+   
+  <!-- end added SubJourneys-->
+</TrustFrameworkPolicy>
