@@ -86,8 +86,8 @@
 
         <ClaimsTransformation Id="GenerateVerificationeMailRequestBody" TransformationMethod="GenerateJson">
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.to.0.email" />
-            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+            <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="personalizations.0.to.0.email" />
+            <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
             <InputClaim ClaimTypeReferenceId="otp" TransformationClaimType="personalizations.0.dynamic_template_data.verification_code" />
             <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="personalizations.0.dynamic_template_data.first_name" />
             <InputClaim ClaimTypeReferenceId="preferredLanguage" TransformationClaimType="personalizations.0.dynamic_template_data.language" />
@@ -119,11 +119,11 @@
     <DisplayControls>
       <DisplayControl Id="emailVerificationControl" UserInterfaceControlType="VerificationControl">
         <DisplayClaims>
-          <DisplayClaim ClaimTypeReferenceId="signInNames.emailAddress" Required="true" />
+          <DisplayClaim ClaimTypeReferenceId="email" Required="true" />
           <DisplayClaim ClaimTypeReferenceId="verificationCode" ControlClaimType="VerificationCode" Required="true" />
         </DisplayClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+          <OutputClaim ClaimTypeReferenceId="email" />
         </OutputClaims>
         <Actions>
           <Action Id="SendCode">
@@ -304,7 +304,7 @@
             <Item Key="ReuseSameCode">false</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identifier" />
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="identifier" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="otp" PartnerClaimType="otpGenerated" />
@@ -318,7 +318,7 @@
             <Item Key="Operation">VerifyCode</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identifier" />
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="identifier" />
             <InputClaim ClaimTypeReferenceId="verificationCode" PartnerClaimType="otpToVerify" />
           </InputClaims>
         </TechnicalProfile>
@@ -348,11 +348,47 @@
             <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
           </DisplayClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
           </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+
+    <ClaimsProvider>
+    <DisplayName>Read user email</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="accountEnabled" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="AssertAccountEnabledIsTrue" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    
     <!-- end added claims provider-->
 
   </ClaimsProviders>
@@ -440,7 +476,7 @@
 
         <!-- <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountDiscoveryUsingEmailAddressCustom" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+            <ClaimsExchange Id="LocalAccountDiscoveryUsingEmailAddressCustom" TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress" />
           </ClaimsExchanges>
         </OrchestrationStep> -->
 
